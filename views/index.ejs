@@ -1,0 +1,24 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+		<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0" />
+
+		<title>Roulette Game</title>
+
+		<script src="viewporter.js"></script>
+		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
+		<script>
+		  var socket = io.connect('http://localhost:8080');
+		  socket.on('news', function (data) {
+		    console.log(data);
+		    socket.emit('my other event', { my: 'data' });
+		  });
+		</script>
+	</head>
+
+	<body>
+		<p><%= message %></p>
+	</body>
+</html>
