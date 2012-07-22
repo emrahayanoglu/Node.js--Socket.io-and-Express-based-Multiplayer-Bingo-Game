@@ -1,5 +1,6 @@
 var express = require('express')
 var socket = require('socket.io');
+var Stopwatch = require('./models/stopwatch');
 
 var io = socket.listen(8080);
 
@@ -28,3 +29,11 @@ app.get('/', function(req, res){
 });
 
 app.listen(3000);
+
+/*
+var stopwatch = new Stopwatch();
+stopwatch.on('tick', function(time) {
+  console.log('tick: ' + time);
+});
+stopwatch.start();
+*/
