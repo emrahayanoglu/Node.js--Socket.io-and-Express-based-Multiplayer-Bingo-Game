@@ -3,6 +3,8 @@ function Player(playerID){
 	this.name = "";
 	this.tableID = -1;
 	this.status = "";
+	this.card = [];
+	this.cardInStraight = [];
 };
 
 Player.prototype.setName = function(name){
@@ -19,6 +21,14 @@ Player.prototype.setTableID = function(tableID){
 
 Player.prototype.getTableID = function(){
 	return this.tableID;
+};
+
+Player.prototype.setCard = function(card){
+	this.card = card;
+};
+
+Player.prototype.getCard = function(){
+	return this.card;
 };
 
 Player.prototype.setStatus = function(status){

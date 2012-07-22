@@ -1,6 +1,7 @@
 var express = require('express')
 var socket = require('socket.io');
 var Stopwatch = require('./models/stopwatch');
+var Game = require('./models/game.js');
 
 var io = socket.listen(8080);
 
@@ -29,6 +30,12 @@ app.get('/', function(req, res){
 });
 
 app.listen(3000);
+
+var game = new Game();
+
+for (var i = 0; i < 5; i++) {
+  game.createPlayerCard();  
+}
 
 /*
 var stopwatch = new Stopwatch();
