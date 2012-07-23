@@ -7,13 +7,42 @@
 
 		<title>Roulette Game</title>
 
-		<script src="viewporter.js"></script>
+		<script src="js/viewporter.js"></script>
 		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
 		<script>
 		  var socket = io.connect('http://localhost:8080');
-		  socket.on('news', function (data) {
-		    console.log(data);
-		    socket.emit('my other event', { my: 'data' });
+		  socket.on('userOnline', function (data) {
+		    socket.emit('connectToServer', { : 'data' });
+		  });
+		  socket.on('newUserOnline',function(data){
+
+		  });
+		  socket.on('userConnectedToTable',function(data){
+
+		  });
+		  socket.on('gameStarted',function(data){
+
+		  });
+		  socket.on('numberChosen',function(data){
+
+		  });
+		  socket.on('gameFinished',function(data){
+
+		  });
+		  socket.on('gameRestarted',function(data){
+
+		  });
+		  socket.on('userDisconnectedFromTable',function(data){
+
+		  });
+		  socket.on('userDisconnectedFromGame',function(data){
+
+		  });
+		  socket.on('userSendChatMessage',function(data){
+
+		  });
+		  socket.on('userSentChatMessageToUser',function(data){
+
 		  });
 		</script>
 	</head>

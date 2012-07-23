@@ -2,13 +2,31 @@ var express = require('express')
 var socket = require('socket.io');
 var Stopwatch = require('./models/stopwatch');
 var Game = require('./models/game.js');
+var Player = require('./models/player.js');
+var Table = require('./models/table.js');
+var Utility = require('./models/utility.js');
 
 var io = socket.listen(8080);
 
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
+  socket.emit('userOnline');
   socket.on('my other event', function (data) {
     console.log(data);
+  });
+  socket.on('connectToServer',function(data){
+
+  });
+  socket.on('connectToTable',function(data){
+
+  });
+  socket.on('userLeaveFromTable',function(data){
+
+  });
+  socket.on('sendChatMessage',function(data){
+
+  });
+  socket.on('sendChatMessageToUser',function(data){
+
   });
 });
 
@@ -32,9 +50,10 @@ app.get('/', function(req, res){
 app.listen(3000);
 
 var game = new Game();
+var player = new Player("sdfdsfdsfsdf9328098032");
 
 for (var i = 0; i < 5; i++) {
-  game.createPlayerCard();  
+  game.createPlayerCard(player);  
 }
 
 /*
