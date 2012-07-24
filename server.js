@@ -5,16 +5,26 @@ var Game = require('./models/game.js');
 var Player = require('./models/player.js');
 var Table = require('./models/table.js');
 var Utility = require('./models/utility.js');
+var Room = require('./models/room.js');
 
 var io = socket.listen(8080);
 
+var utility = new Utility();
+
+var room = new Room("Test Room");
+
 io.sockets.on('connection', function (socket) {
   socket.emit('userOnline');
-  socket.on('my other event', function (data) {
-    console.log(data);
-  });
   socket.on('connectToServer',function(data){
-
+    //Add player to the room
+    var player = new Player(socket.id);
+    player.setName(data.username);
+    player.status = "online";
+    room.addPlayer(player);
+    //Send Other Players that new player has connected
+    utility.sendMessageToAllPlayersButPlayer('newUserOnline',{message:"Player is online",username:data.username},
+      io,room.players,player);
+    console.log(room);
   });
   socket.on('connectToTable',function(data){
 
@@ -27,6 +37,20 @@ io.sockets.on('connection', function (socket) {
   });
   socket.on('sendChatMessageToUser',function(data){
 
+  });
+  socket.on('disconnect', function(){
+    //Check player status whether she is in table or game
+    var player = room.getPlayer(socket.id);
+    if(player.status === "online"){
+
+    }
+    else
+    {
+
+    }
+    room.removePlayer(player);
+    utility.sendMessageToAllPlayersButPlayer('userDisconnectedFromGame',{message:"Player is disconnected",username:player.name},
+      io,room.players,player);
   });
 });
 

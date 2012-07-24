@@ -5,44 +5,44 @@
 		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 		<meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0" />
 
-		<title>Roulette Game</title>
+		<title>Bingo Game</title>
 
 		<script src="js/viewporter.js"></script>
 		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
 		<script>
 		  var socket = io.connect('http://localhost:8080');
 		  socket.on('userOnline', function (data) {
-		    socket.emit('connectToServer', { : 'data' });
+		    socket.emit('connectToServer', { username : 'emrahayanoglu' });
 		  });
 		  socket.on('newUserOnline',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('userConnectedToTable',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('gameStarted',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('numberChosen',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('gameFinished',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('gameRestarted',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('userDisconnectedFromTable',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('userDisconnectedFromGame',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('userSendChatMessage',function(data){
-
+		  	console.log(data);
 		  });
 		  socket.on('userSentChatMessageToUser',function(data){
-
+		  	console.log(data);
 		  });
 		</script>
 	</head>
