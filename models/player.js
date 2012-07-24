@@ -1,7 +1,7 @@
 function Player(playerID){
 	this.id = playerID;
 	this.name = "";
-	this.tableID = -1;
+	this.tableID = "";
 	this.status = "";
 	this.card = [];
 	this.cardInStraight = [];

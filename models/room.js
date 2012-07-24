@@ -38,6 +38,7 @@ Room.prototype.removeTable = function(table) {
 	}
 	this.tables.remove(tableIndex);
 };
+
 Room.prototype.getPlayer = function(playerId) {
 	var player = null;
 	for(var i = 0; i < this.players.length; i++){
@@ -47,6 +48,17 @@ Room.prototype.getPlayer = function(playerId) {
 		}
 	}
 	return player;
+};
+
+Room.prototype.getTable = function(tableId) {
+	var table = null;
+	for(var i = 0; i < this.tables.length; i++){
+		if(this.tables[i].id == tableId){
+			table = this.tables[i];
+			break;
+		}
+	}
+	return table;
 };
 
 module.exports = Room;

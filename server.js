@@ -19,38 +19,68 @@ io.sockets.on('connection', function (socket) {
     //Add player to the room
     var player = new Player(socket.id);
     player.setName(data.username);
-    player.status = "online";
+    player.status = "available";
     room.addPlayer(player);
     //Send Other Players that new player has connected
-    utility.sendMessageToAllPlayersButPlayer('newUserOnline',{message:"Player is online",username:data.username},
-      io,room.players,player);
+    utility.sendEventToAllPlayersButPlayer('newUserOnline',
+      {message:"Player is online",username:data.username},io,room.players,player);
     console.log(room);
   });
-  socket.on('connectToTable',function(data){
-
+  socket.on('connectToTable',function(data){)
+    var player = room.getPlayer(socket.id);
+    var table = room.getTable(data.tableID);
+    if(table.isTableAvailable()){
+      table.addPlayer(player);
+      utility.sendEventToTable('userConnectedToTable',{message:"Player is in Table"},io,table);
+    }
+    else{
+      socket.emit('errorEvent',{errorNo:100, message: "The table is full!!!"});
+    }
   });
   socket.on('userLeaveFromTable',function(data){
-
+    //Check if the user is in table
+    var player = room.getPlayer(socket.id);
+    if(player.tableID != ""){
+      var table = room.getTable(player.tableID);
+      table.removePlayer(player);
+      utility.sendEventToTable('userDisconnectedFromTable',{username:player.name},io,table);
+      utility.sendEventToAllFreePlayers('userDisconnectedFromTable',{username:player.name},io,room.players);
+      socket.emit('playerDisconnectedFromTable',{username:player.name});
+    }
+    else{
+      socket.emit('errorEvent',{errorNo:101, message: "You are not connected to table!!!"}); 
+    }
   });
   socket.on('sendChatMessage',function(data){
-
+    var player = room.getPlayer(socket.id);
+    if(player.tableID == ""){
+      //Send Message to the Available Players
+      utility.sendEventToAllFreePlayers('userSendChatMessage',{username:player.name,message:data.message},io,room.players);
+    }
+    else
+    {
+      //Send Message to the same Table Players
+      var table = room.getTable(player.tableID);
+      utility.sendEventToTable('userSendChatMessage',{username:player.name},io,table);
+    }
   });
   socket.on('sendChatMessageToUser',function(data){
-
+    var player = room.getPlayer(socket.id);
+    var toPlayer = room.getPlayer(data.playerID);
+    utility.sendEventToSpecificPlayer('userSentChatMessageToUser',{username:player.name},io,toPlayer);
   });
   socket.on('disconnect', function(){
     //Check player status whether she is in table or game
     var player = room.getPlayer(socket.id);
-    if(player.status === "online"){
-
+    if(player.status != "available"){
+      //Remove from table
+      var table = room.getTable(player.tableID);
+      table.removePlayer(player);
     }
-    else
-    {
-
-    }
+    //Remove from room
     room.removePlayer(player);
-    utility.sendMessageToAllPlayersButPlayer('userDisconnectedFromGame',{message:"Player is disconnected",username:player.name},
-      io,room.players,player);
+    utility.sendEventToAllPlayersButPlayer('userDisconnectedFromGame',
+      {message:"Player is disconnected",username:player.name},io,room.players,player);
   });
 });
 
@@ -73,12 +103,14 @@ app.get('/', function(req, res){
 
 app.listen(3000);
 
+/*
 var game = new Game();
 var player = new Player("sdfdsfdsfsdf9328098032");
 
 for (var i = 0; i < 5; i++) {
   game.createPlayerCard(player);  
 }
+*/
 
 /*
 var stopwatch = new Stopwatch();

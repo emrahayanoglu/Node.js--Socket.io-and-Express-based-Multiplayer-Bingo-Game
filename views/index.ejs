@@ -35,6 +35,9 @@
 		  socket.on('userDisconnectedFromTable',function(data){
 		  	console.log(data);
 		  });
+  		  socket.on('playerDisconnectedFromTable',function(data){
+		  	console.log(data);
+		  });
 		  socket.on('userDisconnectedFromGame',function(data){
 		  	console.log(data);
 		  });
@@ -43,6 +46,9 @@
 		  });
 		  socket.on('userSentChatMessageToUser',function(data){
 		  	console.log(data);
+		  });
+		  socket.on('errorEvent',function(data){
+
 		  });
 		</script>
 	</head>

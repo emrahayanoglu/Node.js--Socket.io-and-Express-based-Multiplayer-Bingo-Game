@@ -1,3 +1,6 @@
+Game = require('game.js');
+
+
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
   this.length = from < 0 ? this.length + from : from;
@@ -9,6 +12,8 @@ function Table(tableID){
 	this.name = "";
 	this.status = "";
 	this.players = [];
+	this.playerLimit = 20;
+	this.gameObj = null;
 };
 
 Table.prototype.setName = function(name){
@@ -37,6 +42,16 @@ Table.prototype.isPlaying = function(){
 
 Table.prototype.addPlayer = function(player) {
 	this.players.push(player);
+	if(this.players.length == this.playerLimit){
+		this.status = "playing";
+		//Change status of the each player
+		this.gameObj = new Game();
+		for(var i = 0; i < this.players.length; i++){
+			this.players[i].status = "playing";
+			gameObj.createPlayerCard(this.players[i]);
+		}
+		//Then start the game with stopwatch
+	}
 };
 
 Table.prototype.removePlayer = function(player){
@@ -48,6 +63,10 @@ Table.prototype.removePlayer = function(player){
 		}
 	}
 	this.players.remove(index);
+};
+
+Table.prototype.isTableAvailable = function() {
+	return (this.playerLimit > this.players.length);
 };
 
 module.exports = Table;
