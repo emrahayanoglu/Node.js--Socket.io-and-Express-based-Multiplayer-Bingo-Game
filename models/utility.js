@@ -1,3 +1,7 @@
+Game = require('./game.js');
+Table = require('./table.js');
+var uuid = require('node-uuid');
+
 function Utility () {};
 
 Utility.prototype.sendEventToAllPlayers = function(event,message,io,players) {
@@ -30,6 +34,19 @@ Utility.prototype.sendEventToAllFreePlayers = function(event,message,io,players)
 			io.sockets.socket(players[i].id).emit(event, message);
 		}
 	}
+};
+
+Utility.prototype.createSampleTables = function(tableListSize) {
+	var tableList = [];
+	for(var i = 0; i < tableListSize; i++){
+		var game = new Game();
+		var table = new Table(uuid.v4());
+		table.setName("jstanbul Room " + (i + 1));
+		table.gameObj = game;
+		table.state = "available";
+		tableList.push(table);
+	}
+	return tableList;
 };
 
 module.exports = Utility;

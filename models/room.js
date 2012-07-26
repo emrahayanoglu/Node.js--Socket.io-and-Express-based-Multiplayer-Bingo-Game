@@ -61,4 +61,12 @@ Room.prototype.getTable = function(tableId) {
 	return table;
 };
 
+Room.prototype.getTableMessage = function() {
+	var tableMessageList = [];
+	for (var i = 0; i < this.tables.length; i++) {
+		tableMessageList.push(this.tables[i].createMessageObject());
+	};
+	return tableMessageList;
+};
+
 module.exports = Room;

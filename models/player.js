@@ -2,7 +2,7 @@ function Player(playerID){
 	this.id = playerID;
 	this.name = "";
 	this.tableID = "";
-	this.status = "";
+	this.status = "available";
 	this.card = [];
 	this.cardInStraight = [];
 };

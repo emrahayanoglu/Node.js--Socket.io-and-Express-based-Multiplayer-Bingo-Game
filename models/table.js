@@ -1,4 +1,4 @@
-Game = require('game.js');
+Game = require('./game.js');
 
 
 Array.prototype.remove = function(from, to) {
@@ -10,7 +10,7 @@ Array.prototype.remove = function(from, to) {
 function Table(tableID){
 	this.id = tableID;
 	this.name = "";
-	this.status = "";
+	this.status = "available";
 	this.players = [];
 	this.playerLimit = 20;
 	this.gameObj = null;
@@ -41,17 +41,32 @@ Table.prototype.isPlaying = function(){
 };
 
 Table.prototype.addPlayer = function(player) {
-	this.players.push(player);
-	if(this.players.length == this.playerLimit){
-		this.status = "playing";
-		//Change status of the each player
-		this.gameObj = new Game();
+	//Check table state
+	if(this.state == "available"){
+		//Check this player is in table or not
+		var found = false;
 		for(var i = 0; i < this.players.length; i++){
-			this.players[i].status = "playing";
-			gameObj.createPlayerCard(this.players[i]);
+			if(this.players[i].id == player.id){
+				found = true;
+				break;
+			}
 		}
-		//Then start the game with stopwatch
+		if(!found){
+			this.players.push(player);
+			if(this.players.length == this.playerLimit){
+				this.status = "playing";
+				//Change status of the each player
+				this.gameObj = new Game();
+				for(var i = 0; i < this.players.length; i++){
+					this.players[i].status = "playing";
+					gameObj.createPlayerCard(this.players[i]);
+				}
+				//Then start the game with stopwatch
+			}
+			return true;
+		}
 	}
+	return false;
 };
 
 Table.prototype.removePlayer = function(player){
@@ -62,11 +77,26 @@ Table.prototype.removePlayer = function(player){
 			break;
 		}
 	}
-	this.players.remove(index);
+	if(index != -1){
+		this.players.remove(index);
+	}
 };
 
 Table.prototype.isTableAvailable = function() {
 	return (this.playerLimit > this.players.length);
+};
+
+Table.prototype.createMessageObject = function() {
+	var table = this;
+	var TableMessage = function(){
+		this.id = table.id;
+		this.name = table.name;
+		this.status = table.status;
+		this.players = table.players;
+		this.playerLimit = table.playerLimit;
+	};
+
+	return new TableMessage();
 };
 
 module.exports = Table;

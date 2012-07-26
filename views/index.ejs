@@ -7,53 +7,46 @@
 
 		<title>Bingo Game</title>
 
-		<script src="js/viewporter.js"></script>
-		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
-		<script>
-		  var socket = io.connect('http://localhost:8080');
-		  socket.on('userOnline', function (data) {
-		    socket.emit('connectToServer', { username : 'emrahayanoglu' });
-		  });
-		  socket.on('newUserOnline',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('userConnectedToTable',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('gameStarted',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('numberChosen',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('gameFinished',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('gameRestarted',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('userDisconnectedFromTable',function(data){
-		  	console.log(data);
-		  });
-  		  socket.on('playerDisconnectedFromTable',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('userDisconnectedFromGame',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('userSendChatMessage',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('userSentChatMessageToUser',function(data){
-		  	console.log(data);
-		  });
-		  socket.on('errorEvent',function(data){
-
-		  });
-		</script>
+		<link href="css/jquery.mobile-1.1.1.min.css" rel="stylesheet" type="text/css">
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery.mobile-1.1.1.min.js"></script>
+		<script type="text/javascript" src="js/viewporter.js"></script>
+		<script src="http://10.10.20.85:8080/socket.io/socket.io.js"></script>
+		<script src="js/game.js"></script>
 	</head>
 
 	<body>
-		<p><%= message %></p>
+		<div id="roomPage" data-role="page">
+
+			<div data-role="header" data-theme="e" data-position="fixed">
+				<h1>Bingo! Rooms</h1>
+			</div><!-- /header -->
+
+			<div data-role="content">	
+				<ul id="roomList" data-role="listview">					
+				</ul>
+			</div><!-- /content -->
+			<div data-role="footer" data-theme="e" data-position="fixed">
+				<h4>Footer content</h4>
+			</div><!-- /footer -->
+			
+		</div><!-- /page -->
+		<!-- Start of second page -->
+		<div id="gamePage" data-role="page">
+
+			<div data-role="header" data-theme="e" data-position="fixed">
+				<a href="#" class="backToRoomPage" data-icon="back" class="ui-btn-left">Back</a>
+				<span class="ui-title" />
+			</div><!-- /header -->
+
+			<div data-role="content">	
+				<p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my ID is beeing clicked.</p>		
+				<p><a href="#roomPage">Back to Room Page</a></p>	
+			</div><!-- /content -->
+
+			<div data-role="footer" data-theme="e" data-position="fixed">
+				<h4>Footer content</h4>
+			</div><!-- /footer -->
+		</div><!-- /page -->
 	</body>
 </html>
