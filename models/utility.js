@@ -36,6 +36,14 @@ Utility.prototype.sendEventToAllFreePlayers = function(event,message,io,players)
 	}
 };
 
+Utility.prototype.sendEventToAllFreePlayersButPlayer = function(event,message,io,players,player) {
+	for(var i = 0; i < players.length; i++){
+		if(players[i].status === "available" && players[i].id != player.id){
+			io.sockets.socket(players[i].id).emit(event, message);
+		}
+	}
+};
+
 Utility.prototype.createSampleTables = function(tableListSize) {
 	var tableList = [];
 	for(var i = 0; i < tableListSize; i++){

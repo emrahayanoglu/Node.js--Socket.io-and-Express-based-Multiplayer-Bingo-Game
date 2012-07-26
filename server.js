@@ -47,7 +47,7 @@ io.sockets.on('connection', function (socket) {
       var table = room.getTable(player.tableID);
       table.removePlayer(player);
       utility.sendEventToTable('userDisconnectedFromTable',{username:player.name},io,table);
-      utility.sendEventToAllFreePlayers('userDisconnectedFromTable',{username:player.name},io,room.players);
+      utility.sendEventToAllFreePlayersButPlayer('userDisconnectedFromTable',{username:player.name},io,room.players,player);
       socket.emit('playerDisconnectedFromTable',{username:player.name});
       utility.sendEventToAllPlayers('tableList',{tableList: room.getTableMessage()},io,room.players);
     }
