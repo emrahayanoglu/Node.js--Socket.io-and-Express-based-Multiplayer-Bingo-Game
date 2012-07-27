@@ -11,6 +11,7 @@
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.1.1.min.js"></script>
 		<script type="text/javascript" src="js/viewporter.js"></script>
+		<script type="text/javascript" src="js/graphic.js"></script>
 		<script src="http://localhost:8080/socket.io/socket.io.js"></script>
 		<script src="js/game.js"></script>
 	</head>
@@ -40,8 +41,7 @@
 			</div><!-- /header -->
 
 			<div data-role="content">	
-				<p>I'm the second in the source order so I'm hidden when the page loads. I'm just shown if a link that references my ID is beeing clicked.</p>		
-				<p><a href="#roomPage">Back to Room Page</a></p>	
+				<canvas id="gameCanvas" width="578" height="200"></canvas>
 			</div><!-- /content -->
 
 			<div data-role="footer" data-theme="e" data-position="fixed">

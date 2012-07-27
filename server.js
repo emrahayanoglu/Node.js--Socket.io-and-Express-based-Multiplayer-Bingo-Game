@@ -1,6 +1,5 @@
 var express = require('express')
 var socket = require('socket.io');
-var Stopwatch = require('./models/stopwatch');
 var Game = require('./models/game.js');
 var Player = require('./models/player.js');
 var Table = require('./models/table.js');
@@ -42,13 +41,7 @@ io.sockets.on('connection', function (socket) {
         //Now table starts playing
         utility.sendEventToTable('gameStarted',
           {tableList: room.getTableMessage()},io,table);
-        var stopwatch = new Stopwatch();
-        var gameObject = table.gameObj;
-        stopwatch.on('tick', function(time) {
-          var chosenNumber = gameObject.chooseNumber();
-          utility.sendEventToTable('numberChosen',{chosenNumber: chosenNumber},io,table);
-        });
-        stopwatch.start();
+        table.gameObj.startGame(utility,io,table);
       }
     }
     else{

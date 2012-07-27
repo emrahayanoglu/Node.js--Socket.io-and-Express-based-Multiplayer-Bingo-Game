@@ -28,6 +28,15 @@ Utility.prototype.sendEventToTable = function(event,message,io,table) {
 	}	
 };
 
+Utility.prototype.sendEventToTableInPlay = function(event,message,io,table) {
+	for (var i = 0; i < table.players.length; i++) {
+		message.userId = table.players[i].id;
+		message.userCard = table.players[i].card;
+		message.userCardInStraight = table.players[i].cardInStraight;
+		io.sockets.socket(table.players[i].id).emit(event, message);
+	};
+};
+
 Utility.prototype.sendEventToAllFreePlayers = function(event,message,io,players) {
 	for(var i = 0; i < players.length; i++){
 		if(players[i].status === "available"){

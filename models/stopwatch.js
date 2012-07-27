@@ -36,7 +36,7 @@ Stopwatch.prototype.start = function() {
     // note the use of _.bindAll in the constructor
     // with bindAll we can pass one of our methods to
     // setInterval and have it called with the proper 'this' value
-    this.interval = setInterval(this.onTick, this.second * 2);
+    this.interval = setInterval(this.onTick, this.second / 2);
     this.emit('start');
 };
 
@@ -82,7 +82,7 @@ Stopwatch.prototype.onTick = function() {
     }).join(":");
 
     this.emit('tick', output);
-    this.time -= this.second * 2;
+    this.time -= this.second / 2;
 };
 
 // ---------------------------------------------

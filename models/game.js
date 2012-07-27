@@ -1,4 +1,5 @@
 r = require('mersenne');
+Stopwatch = require('./stopwatch.js');
 
 Array.prototype.remove = function(from, to) {
   var rest = this.slice((to || from) + 1 || this.length);
@@ -30,12 +31,19 @@ function Game(){
 
 Game.prototype.chooseNumber = function() {
 	//Remove from nonSelectedNumbers and Add to the selectedNumbers
-	if(this.selectedNumbers.length != 90){
+	if(this.selectedNumbers.length < 89){
 		var chosenNumberIndex = r.rand(this.nonSelectedNumbers.length - 1);
 		var number = this.nonSelectedNumbers[chosenNumberIndex];
 		this.nonSelectedNumbers.remove(chosenNumberIndex);
 		this.selectedNumbers.push(number);
 		return number;
+	}
+	else if(this.nonSelectedNumbers.length == 1){
+		var chosenNumberIndex = 0;
+		var number = this.nonSelectedNumbers[chosenNumberIndex];
+		this.nonSelectedNumbers.remove(chosenNumberIndex);
+		this.selectedNumbers.push(number);
+		return number;		
 	}
 };
 
@@ -49,14 +57,15 @@ Game.prototype.createPlayerCard = function(player){
 		var chosenNumberIndex = r.rand(89 - cardNumberCount);
 		var chosenNumber = newNumberArray[chosenNumberIndex];
 		newNumberArray.remove(chosenNumberIndex);
-		chosenNumberArray.push(chosenNumber);
 		if(chosenNumber == 90 && card[8].length < 3){
 			card[8].push(chosenNumber);
 			cardNumberCount++;
+			chosenNumberArray.push(chosenNumber);
 		}
 		else if(card[parseInt(chosenNumber / 10)].length < 3){
 			card[parseInt(chosenNumber / 10)].push(chosenNumber);
 			cardNumberCount++;
+			chosenNumberArray.push(chosenNumber);
 		}
 	}
 	player.card = card;
@@ -64,35 +73,46 @@ Game.prototype.createPlayerCard = function(player){
 };
 
 Game.prototype.isPlayerWinsBingo = function (player) {
-	var bingoArray = [false,false,false,false,false,false,false,false,false,false,false,false,false,false,false];
-	var cardCount = 0;
+	var bingoArray = [];
+	console.log("Player Card Length: " + player.cardInStraight.length);
 	for (var i = 0; i < this.selectedNumbers.length; i++) {
-		for(var j = 0; j < player.card.length; j++){
+		for(var j = 0; j < player.cardInStraight.length; j++){
 			if(this.selectedNumbers[i] == player.cardInStraight[j]){
-				bingoArray[cardCount] = true;
-				cardCount++;
-			}
-			else
-			{
-				bingoArray[cardCount] = false;
-				cardCount++;
-				break;
+				bingoArray.push(true);
 			}
 		}
 	}
-	var result = true;
-	for (var i = 0; i < bingoArray.length; i++) {
-		if(bingoArray[i] == false){
-			result = false;
-			break;
-		}
-	}
-	return result;
+	console.log(bingoArray);
+	return bingoArray.length == 15;
 };
 
-Game.prototype.startGame = function(table) {
-	// Check if the table is full or not
-	// If table is full check players' statuses
+Game.prototype.startGame = function(utility,io,table) {
+    var stopwatch = new Stopwatch();
+    var gameObject = this;
+    stopwatch.on('tick', function(time) {
+      var chosenNumber = gameObject.chooseNumber();
+      utility.sendEventToTableInPlay('numberChosen',{chosenNumber: chosenNumber},io,table);
+      var bingoArray = gameObject.checkAnyPlayerWinsBingo(table);
+      console.log(gameObject.selectedNumbers.length);
+      console.log(gameObject.nonSelectedNumbers.length);
+      if(bingoArray.length > 0){
+      	//Whoorayyy at least one player wins the bingo
+      	utility.sendEventToTableInPlay('gameFinished',{message:"Game is finished"},io,table);
+      	stopwatch.stop();
+      	stopwatch.reset();
+      }
+    });
+    stopwatch.start();
+};
+
+Game.prototype.checkAnyPlayerWinsBingo = function(table) {
+	var found = [];
+	for(var i = 0; i < table.players.length; i++){
+		if(this.isPlayerWinsBingo(table.players[i])){
+			found.push(table.players[i]);
+		}
+	}
+	return found;
 };
 
 module.exports = Game;
