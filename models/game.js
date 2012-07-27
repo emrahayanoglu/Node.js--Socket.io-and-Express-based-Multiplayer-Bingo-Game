@@ -92,14 +92,20 @@ Game.prototype.startGame = function(utility,io,table) {
     stopwatch.on('tick', function(time) {
       var chosenNumber = gameObject.chooseNumber();
       utility.sendEventToTableInPlay('numberChosen',{chosenNumber: chosenNumber},io,table);
-      var bingoArray = gameObject.checkAnyPlayerWinsBingo(table);
+      var bingoWinners = gameObject.checkAnyPlayerWinsBingo(table);
       console.log(gameObject.selectedNumbers.length);
       console.log(gameObject.nonSelectedNumbers.length);
-      if(bingoArray.length > 0){
+      if(bingoWinners.length > 0){
       	//Whoorayyy at least one player wins the bingo
       	utility.sendEventToTableInPlay('gameFinished',{message:"Game is finished"},io,table);
+      	utility.sendEventToSelectedPlayers('bingoWinner',{message:"You are the bingo winner!"},io,bingoWinners);
       	stopwatch.stop();
       	stopwatch.reset();
+      	table.status = "full";
+      	for(var i = 0; i < table.players.length; i++){
+      		table.players[i].status = "inTable";
+      	}
+      	//Ask players to play again or leave the room
       }
     });
     stopwatch.start();

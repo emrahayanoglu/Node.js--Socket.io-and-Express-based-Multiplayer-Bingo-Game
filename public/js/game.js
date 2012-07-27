@@ -45,6 +45,9 @@ socket.on('numberChosen',function(data){
 socket.on('gameFinished',function(data){
 	console.log(data);
 });
+socket.on('bingoWinner',function(data){
+	console.log(data);
+});
 socket.on('gameRestarted',function(data){
 	console.log(data);
 });
