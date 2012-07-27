@@ -12,7 +12,7 @@ function Table(tableID){
 	this.name = "";
 	this.status = "available";
 	this.players = [];
-	this.playerLimit = 20;
+	this.playerLimit = 2;
 	this.gameObj = null;
 };
 
@@ -59,9 +59,8 @@ Table.prototype.addPlayer = function(player) {
 				this.gameObj = new Game();
 				for(var i = 0; i < this.players.length; i++){
 					this.players[i].status = "playing";
-					gameObj.createPlayerCard(this.players[i]);
+					this.gameObj.createPlayerCard(this.players[i]);
 				}
-				//Then start the game with stopwatch
 			}
 			return true;
 		}

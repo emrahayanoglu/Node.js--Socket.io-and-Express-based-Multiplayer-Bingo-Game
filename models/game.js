@@ -30,10 +30,13 @@ function Game(){
 
 Game.prototype.chooseNumber = function() {
 	//Remove from nonSelectedNumbers and Add to the selectedNumbers
-	var chosenNumberIndex = r.rand(this.nonSelectedNumbers.length - 1);
-	var number = nonSelectedNumbers[chosenNumberIndex];
-	this.nonSelectedNumbers.remove(chosenNumberIndex);
-	this.selectedNumbers.push(number);
+	if(this.selectedNumbers.length != 90){
+		var chosenNumberIndex = r.rand(this.nonSelectedNumbers.length - 1);
+		var number = this.nonSelectedNumbers[chosenNumberIndex];
+		this.nonSelectedNumbers.remove(chosenNumberIndex);
+		this.selectedNumbers.push(number);
+		return number;
+	}
 };
 
 Game.prototype.createPlayerCard = function(player){

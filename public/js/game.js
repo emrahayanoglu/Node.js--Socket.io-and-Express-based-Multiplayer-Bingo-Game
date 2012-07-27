@@ -26,15 +26,21 @@ socket.on('tableList',function(data){
 		socket.emit('connectToTable', {tableID: selectedTableId});
 		$.mobile.changePage("#gamePage");
 	});
+
+	$("#onlineUserCount").empty();
+	$("#onlineUserCount").text("-- " + data.playerCount + " Online Users --");
 });
 socket.on('userConnectedToTable',function(data){
 	//Write on the user log that a new user has come to table
 });
 socket.on('gameStarted',function(data){
+	console.log("A new game is started");
 	console.log(data);
+	//Draw card and start playing
 });
 socket.on('numberChosen',function(data){
 	console.log(data);
+	//Draw chosen number and if number is on the card, then fill the chosen number on the card
 });
 socket.on('gameFinished',function(data){
 	console.log(data);
@@ -43,6 +49,7 @@ socket.on('gameRestarted',function(data){
 	console.log(data);
 });
 socket.on('userDisconnectedFromTable',function(data){
+	//Write on the user log that a user has disconnected from table
 });
 socket.on('playerDisconnectedFromTable',function(data){
 	$.mobile.changePage("#roomPage");

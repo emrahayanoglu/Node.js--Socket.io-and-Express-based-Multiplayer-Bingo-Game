@@ -25,7 +25,8 @@ io.sockets.on('connection', function (socket) {
     //Send Other Players that new player has connected
     utility.sendEventToAllPlayersButPlayer('newUserOnline',
       {message:"Player is online",username:data.username},io,room.players,player);
-    utility.sendEventToAllPlayers('tableList',{tableList: room.getTableMessage()},io,room.players);
+    utility.sendEventToAllPlayers('tableList',
+      {tableList: room.getTableMessage(),playerCount:room.players.length},io,room.players);
   });
   socket.on('connectToTable',function(data){
     var player = room.getPlayer(socket.id);
@@ -33,8 +34,22 @@ io.sockets.on('connection', function (socket) {
     if(table.isTableAvailable() && table.addPlayer(player)){
       player.tableID = table.id;
       player.status = 'inTable';
-      utility.sendEventToTable('userConnectedToTable',{message:"Player is in Table"},io,table);
-      utility.sendEventToAllPlayers('tableList',{tableList: room.getTableMessage()},io,room.players);
+      utility.sendEventToTable('userConnectedToTable',
+        {message:"Player is in Table"},io,table);
+      utility.sendEventToAllPlayers('tableList',
+        {tableList: room.getTableMessage(),playerCount:room.players.length},io,room.players);
+      if(table.isPlaying()){
+        //Now table starts playing
+        utility.sendEventToTable('gameStarted',
+          {tableList: room.getTableMessage()},io,table);
+        var stopwatch = new Stopwatch();
+        var gameObject = table.gameObj;
+        stopwatch.on('tick', function(time) {
+          var chosenNumber = gameObject.chooseNumber();
+          utility.sendEventToTable('numberChosen',{chosenNumber: chosenNumber},io,table);
+        });
+        stopwatch.start();
+      }
     }
     else{
       socket.emit('errorEvent',{errorNo:100, message: "The table is full!!!"});
@@ -46,10 +61,14 @@ io.sockets.on('connection', function (socket) {
     if(player.tableID != ""){
       var table = room.getTable(player.tableID);
       table.removePlayer(player);
-      utility.sendEventToTable('userDisconnectedFromTable',{username:player.name},io,table);
-      utility.sendEventToAllFreePlayersButPlayer('userDisconnectedFromTable',{username:player.name},io,room.players,player);
-      socket.emit('playerDisconnectedFromTable',{username:player.name});
-      utility.sendEventToAllPlayers('tableList',{tableList: room.getTableMessage()},io,room.players);
+      utility.sendEventToTable('userDisconnectedFromTable',
+        {username:player.name},io,table);
+      utility.sendEventToAllFreePlayersButPlayer('userDisconnectedFromTable',{
+        username:player.name},io,room.players,player);
+      socket.emit('playerDisconnectedFromTable',
+        {username:player.name});
+      utility.sendEventToAllPlayers('tableList',
+        {tableList: room.getTableMessage(),playerCount: room.players.length},io,room.players);
     }
     else{
       socket.emit('errorEvent',{errorNo:101, message: "You are not connected to table!!!"}); 
@@ -59,19 +78,22 @@ io.sockets.on('connection', function (socket) {
     var player = room.getPlayer(socket.id);
     if(player.tableID == ""){
       //Send Message to the Available Players
-      utility.sendEventToAllFreePlayers('userSendChatMessage',{username:player.name,message:data.message},io,room.players);
+      utility.sendEventToAllFreePlayers('userSendChatMessage',
+        {username:player.name,message:data.message},io,room.players);
     }
     else
     {
       //Send Message to the same Table Players
       var table = room.getTable(player.tableID);
-      utility.sendEventToTable('userSendChatMessage',{username:player.name},io,table);
+      utility.sendEventToTable('userSendChatMessage',
+        {username:player.name},io,table);
     }
   });
   socket.on('sendChatMessageToUser',function(data){
     var player = room.getPlayer(socket.id);
     var toPlayer = room.getPlayer(data.playerID);
-    utility.sendEventToSpecificPlayer('userSentChatMessageToUser',{username:player.name},io,toPlayer);
+    utility.sendEventToSpecificPlayer('userSentChatMessageToUser',
+      {username:player.name},io,toPlayer);
   });
   socket.on('disconnect', function(){
     //Check player status whether she is in table or game
@@ -85,7 +107,8 @@ io.sockets.on('connection', function (socket) {
     room.removePlayer(player);
     utility.sendEventToAllPlayersButPlayer('userDisconnectedFromGame',
       {message:"Player is disconnected",username:player.name},io,room.players,player);
-    utility.sendEventToAllPlayers('tableList',{tableList: room.getTableMessage()},io,room.players);
+    utility.sendEventToAllPlayers('tableList',
+      {tableList: room.getTableMessage(),playerCount: room.players.length},io,room.players);
   });
 });
 
@@ -111,15 +134,6 @@ app.get('/', function(req, res){
 app.listen(3000);
 
 // </Express Section>
-
-/*
-var game = new Game();
-var player = new Player("sdfdsfdsfsdf9328098032");
-
-for (var i = 0; i < 5; i++) {
-  game.createPlayerCard(player);  
-}
-*/
 
 /*
 var stopwatch = new Stopwatch();
