@@ -41,12 +41,21 @@ socket.on('gameStarted',function(data){
 socket.on('numberChosen',function(data){
 	console.log(data);
 	//Draw chosen number and if number is on the card, then fill the chosen number on the card
+	$("#chosenNumberSpan").text(data.chosenNumber);
+	for(var i = 0; i < data.userCard.length; i++){
+		var className = (i + 1) + "_Column";
+		$("." + className).empty();
+		for(var j = 0; j < data.userCard[i].length; j++){
+			
+			$("." + className).append(data.userCard[i][j] + "<br/><br/>");
+		}
+	}
 });
 socket.on('gameFinished',function(data){
-	console.log(data);
+	$("#gameFinishedSpan").text("Game is Finished");
 });
 socket.on('bingoWinner',function(data){
-	console.log(data);
+	$("#gameFinishedSpan").text("You are the Bingo Winner");
 });
 socket.on('gameRestarted',function(data){
 	console.log(data);

@@ -30,7 +30,7 @@ function Game(){
 };
 
 Game.prototype.chooseNumber = function() {
-	//Remove from nonSelectedNumbers and Add to the selectedNumbers
+	//Remove from nonSelectedNumbers and add to the selectedNumbers
 	if(this.selectedNumbers.length < 89){
 		var chosenNumberIndex = r.rand(this.nonSelectedNumbers.length - 1);
 		var number = this.nonSelectedNumbers[chosenNumberIndex];

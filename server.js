@@ -13,6 +13,8 @@ var utility = new Utility();
 var room = new Room("Test Room");
 room.tables = utility.createSampleTables(10);
 
+
+// <Socket.IO Section>
 io.sockets.on('connection', function (socket) {
   socket.emit('userOnline');
   socket.on('connectToServer',function(data){
@@ -104,6 +106,7 @@ io.sockets.on('connection', function (socket) {
       {tableList: room.getTableMessage(),playerCount: room.players.length},io,room.players);
   });
 });
+//</Socket.IO Section>
 
 // <Express Section>
 
@@ -127,11 +130,3 @@ app.get('/', function(req, res){
 app.listen(3000);
 
 // </Express Section>
-
-/*
-var stopwatch = new Stopwatch();
-stopwatch.on('tick', function(time) {
-  console.log('tick: ' + time);
-});
-stopwatch.start();
-*/
