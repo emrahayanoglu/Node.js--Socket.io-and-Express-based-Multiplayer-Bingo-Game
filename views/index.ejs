@@ -9,6 +9,7 @@
 		<title>Bingo Game</title>
 
 		<link href="css/jquery.mobile-1.1.1.min.css" rel="stylesheet" type="text/css">
+		<link href="css/style.css" rel="stylesheet" type="text/css">
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/jquery.mobile-1.1.1.min.js"></script>
 		<script type="text/javascript" src="js/viewporter.js"></script>
@@ -44,26 +45,44 @@
 			<div data-role="content">
 				<h3><span id="gameFinishedSpan"><span></h3>
 				<br/>	
-				<h3>Chosen Number:<span id="chosenNumberSpan"></span></h3>
+				<h3>Chosen Number: <span id="chosenNumberSpan"></span></h3>
 				<br/>
 				<div class="ui-grid-a">
-					<div class="ui-block-a">
-						<div class="ui-grid-c">
-							<div class="ui-block-a 1_Column"></div>
-							<div class="ui-block-b 2_Column"></div>
-							<div class="ui-block-c 3_Column"></div>
-							<div class="ui-block-d 4_Column"></div>
-						</div><!-- /grid-c -->
-					</div>
-					<div class="ui-block-b">
-						<div class="ui-grid-d">
-							<div class="ui-block-a 5_Column"></div>
-							<div class="ui-block-b 6_Column"></div>
-							<div class="ui-block-c 7_Column"></div>
-							<div class="ui-block-d 8_Column"></div>
-							<div class="ui-block-e 9_Column"></div>
-						</div><!-- /grid-c -->
-					</div>
+					<table id="newspaper-a">
+						<tr>
+							<td class="1_row_1_column"></td>
+							<td class="1_row_2_column"></td>
+							<td class="1_row_3_column"></td>
+							<td class="1_row_4_column"></td>
+							<td class="1_row_5_column"></td>
+							<td class="1_row_6_column"></td>
+							<td class="1_row_7_column"></td>
+							<td class="1_row_8_column"></td>
+							<td class="1_row_9_column"></td>
+						</tr>
+						<tr>
+							<td class="2_row_1_column"></td>
+							<td class="2_row_2_column"></td>
+							<td class="2_row_3_column"></td>
+							<td class="2_row_4_column"></td>
+							<td class="2_row_5_column"></td>
+							<td class="2_row_6_column"></td>
+							<td class="2_row_7_column"></td>
+							<td class="2_row_8_column"></td>
+							<td class="2_row_9_column"></td>
+						</tr>
+						<tr>
+							<td class="3_row_1_column"></td>
+							<td class="3_row_2_column"></td>
+							<td class="3_row_3_column"></td>
+							<td class="3_row_4_column"></td>
+							<td class="3_row_5_column"></td>
+							<td class="3_row_6_column"></td>
+							<td class="3_row_7_column"></td>
+							<td class="3_row_8_column"></td>
+							<td class="3_row_9_column"></td>
+						</tr>
+					</table>
 				</div><!-- /grid-a -->
 			</div><!-- /content -->
 

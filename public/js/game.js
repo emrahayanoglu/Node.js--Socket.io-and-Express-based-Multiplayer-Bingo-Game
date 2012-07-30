@@ -1,10 +1,19 @@
 $(document).ready(function(){
 	$(".backToRoomPage").click(function(){
 		socket.emit('userLeaveFromTable',{});
+		isCardShown = false;
+		for(var i = 0; i < 9; i++){
+			for(var j = 0; j < 3; j++){
+				var className = (j + 1) + "_row_" + (i + 1) + "_column";
+				$("." + className).empty();
+			}
+		}
+		$("#gameFinishedSpan").text("");
 	});
 });
 
 var socket = io.connect('http://localhost:8080');
+var isCardShown = false;
 
 socket.on('userOnline', function (data) {
 	socket.emit('connectToServer', { username : 'emrahayanoglu' });
@@ -42,13 +51,27 @@ socket.on('numberChosen',function(data){
 	console.log(data);
 	//Draw chosen number and if number is on the card, then fill the chosen number on the card
 	$("#chosenNumberSpan").text(data.chosenNumber);
-	for(var i = 0; i < data.userCard.length; i++){
-		var className = (i + 1) + "_Column";
-		$("." + className).empty();
-		for(var j = 0; j < data.userCard[i].length; j++){
-			
-			$("." + className).append(data.userCard[i][j] + "<br/><br/>");
+	if(!isCardShown){
+		for(var i = 0; i < data.userCard.length; i++){
+			for(var j = 0; j < data.userCard[i].length; j++){
+				var className = (j + 1) + "_row_" + (i + 1) + "_column";
+				$("." + className).empty();
+				$("." + className).append(data.userCard[i][j]);
+			}
 		}
+		isCardShown = true;
+	}
+	else{
+		for(var i = 0; i < data.userCard.length; i++){
+			for(var j = 0; j < data.userCard[i].length; j++){
+				var className = (j + 1) + "_row_" + (i + 1) + "_column";
+				if(parseInt($("." + className).text()) == data.chosenNumber){
+					$("." + className).empty();
+					$("." + className).append("Secili " + data.userCard[i][j]);
+					break;
+				}
+			}
+		}		
 	}
 });
 socket.on('gameFinished',function(data){
